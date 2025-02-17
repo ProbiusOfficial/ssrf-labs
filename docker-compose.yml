@@ -1,0 +1,79 @@
+version: '3.8'
+
+networks:
+  ssrf_labs:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.72.23.0/24"
+          gateway: "172.72.23.1"
+          
+services:
+  web1_entry:
+    build: ./172.72.23.21-SSRF/
+    image: ssrf_labs:entry
+    networks:
+      ssrf_labs:
+        ipv4_address: 172.72.23.21
+    ports:
+      - "8080:80"
+
+  web2_codexec:
+    build: ./172.72.23.22-CodeExec/
+    image: ssrf_labs:codexec
+    networks:
+      ssrf_labs:
+        ipv4_address: 172.72.23.22
+
+  web3_sqli:
+    build: ./172.72.23.23-SQLI/
+    image: ssrf_labs:sqli
+    networks:
+      ssrf_labs:
+        ipv4_address: 172.72.23.23
+
+  web4_commandexec:
+    build: ./172.72.23.24-CommandExec/
+    image: ssrf_labs:commandexec
+    networks:
+      ssrf_labs:
+        ipv4_address: 172.72.23.24
+
+  web5_xxe:
+    build: ./172.72.23.25-XXE/
+    image: ssrf_labs:xxe
+    networks:
+      ssrf_labs:
+        ipv4_address: 172.72.23.25
+
+  web6_tomcat:
+    build: ./172.72.23.26-Tomcat/
+    image: ssrf_labs:tomcat
+    networks:
+      ssrf_labs:
+        ipv4_address: 172.72.23.26
+
+  web7_redisunauth:
+    build: ./172.72.23.27-Redisunauth/
+    image: ssrf_labs:redis-unauth
+    networks:
+      ssrf_labs:
+        ipv4_address: 172.72.23.27
+
+
+  web8_redisauth:
+    build: ./172.72.23.28-Redisauth/
+    image: ssrf_labs:redis-auth
+    networks:
+      ssrf_labs:
+        ipv4_address: 172.72.23.28
+
+
+  web9_mysql:
+    build: ./172.72.23.29-MySQL/
+    image: ssrf_labs:mysql
+    networks:
+      ssrf_labs:
+        ipv4_address: 172.72.23.29
+
+

