@@ -6,7 +6,8 @@ COPY flag /flag
 COPY redis.conf /etc/
 COPY start.sh /start.sh
 COPY www/* /var/www/html
-RUN chmod -v +x /start.sh
+RUN chmod -v +x /start.sh \
+    && chmod +x /usr/local/bin/redis-server
 EXPOSE 80
 EXPOSE 6379
 CMD ["/start.sh"]

@@ -16,7 +16,7 @@ services:
       ssrf_labs:
         ipv4_address: 172.72.23.21
     ports:
-      - "8080:80"
+      - "8880:80"
 
   web2_codexec:
     build: ./172.72.23.22-CodeExec/
