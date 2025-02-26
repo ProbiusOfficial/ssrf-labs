@@ -1,125 +1,179 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Hello-CTF | SSRF Challenge</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>SSRF综合靶场 - Hello-CTF</title>
     <style>
-        body {
-            background: #ffffff;
-            color: #333;
-            font-family: 'Segoe UI', Arial, sans-serif;
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --background-color: #ffffff;
+            --text-color: #2c3e50;
+            --code-background: #f4f4f4;}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;font-family: 'Arial', 'Microsoft YaHei', sans-serif;
         }
-        .main-container {
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 2rem;
-            margin-top: 2rem;
+        }
+
+        .challenge-title {
+            text-align: center;
+            color: var(--primary-color);
             margin-bottom: 2rem;
         }
-        .custom-input {
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            padding: 12px;
-            transition: all 0.3s ease;
-        }
-        .custom-input:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
-        }
-        .custom-btn {
-            background: #007bff;
-            border: none;
-            padding: 10px 30px;
-            border-radius: 5px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-        .custom-btn:hover {
-            background: #0056b3;
-            transform: translateY(-1px);
-        }
-        .navbar {
-            background: #ffffff !important;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        .security-notice {
-            background: #f8f9fa;
-            border-left: 4px solid #007bff;
-            padding: 1rem;
-            margin: 1rem 0;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        .output-area {
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
-            border-radius: 5px;
-            padding: 1rem;
+
+        .challenge-description {
+            background-color: var(--code-background);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
             margin-top: 1rem;
+        }
+
+        .challenge-input {
+            width: 100%;
+            padding: 0.8rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--secondary-color);
+            border-radius: 4px;}
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .source-code {
+            background-color: var(--code-background);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .footer {
+            text-align: center;
+            padding: 1rem 0;
+            margin-top: 2rem;
+            border-top: 1px solid var(--secondary-color);
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+        
+        .footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-<?php
-    error_reporting(0);
-    function curl($url){
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $result = curl_exec($ch);
-        curl_close($ch);
-        return $result;
-    }
-?>
-
-<nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-        <a class="navbar-brand" href="https://hello-ctf.com">
-            <img src="/assets/logo.png" width="30" height="30" class="d-inline-block align-top me-2" alt="Logo">
-            Hello-CTF | SSRF Challenge
-        </a>
-    </div>
-</nav>
-
-<div class="container">
-    <div class="main-container">
-        <h2 class="text-center mb-4">Web URL Scanner</h2>
-
-        <div class="security-notice">
-            <h5>安全模拟实验环境 - 本系统仅供学习SSRF原理使用</h5>
-        </div><form method="POST" class="mb-4">
-            <div class="form-group">
-                <input type="text" class="form-control custom-input" 
-                       name="url" placeholder="请输入要扫描的URL (例如: http://example.com)"
-                       required>
+        <h1 class="challenge-title">SSRF-Labs 综合靶场 | Hello-CTF系列靶场</h1>
+        <div class="challenge-description">
+            <h2>入口点</h2>
+            <p>综合靶机一共有 9 个靶机（含本机），尝试找个突破口吧w</p>
+            <button onclick="toggleTips()" class="submit-btn" style="margin-top: 10px;">显示/隐藏靶场拓扑</button>
+            <div id="tips" style="display: none; margin-top: 10px;">
+                <strong>靶场拓扑:</strong><br>
+                172.72.23.22-CodeExec<br>
+                172.72.23.23-SQLI<br>
+                172.72.23.24-CommandExec<br>
+                172.72.23.25-XXE<br>
+                172.72.23.26-Tomcat<br>
+                172.72.23.27-Redisunauth<br>
+                172.72.23.28-Redisauth<br>
+                172.72.23.29-MySQL
             </div>
-            <div class="text-center mt-3">
-                <button type="submit" class="btn custom-btn">开始扫描</button>
-            </div>
+            <script>
+                function toggleTips() {
+                    var tips = document.getElementById("tips");
+                    tips.style.display = tips.style.display === "none" ? "block" : "none";
+                }
+            </script>
+            <br>
+            <p>.tip:使用file协议查看当前主机的hosts文件获取更多信息</p>
+        </div>
+
+        <form id="ssrfForm">
+            <input type="url" id="urlInput" class="challenge-input"placeholder="输入要请求的 URL（例如：http://example.com）" 
+                   required>
+            <button type="submit" class="submit-btn">发送请求</button>
         </form>
 
-        <?php
-            $url = $_POST['url'];
-            if($url){
-                echo '<div class="output-area">';
-                echo "<h5>扫描结果:</h5>";
-                echo "<pre>";
-                echo htmlspecialchars(curl($url));
-                echo "</pre>";
-                echo '</div>';
-            }
-        ?>
+        <div id="result" class="challenge-description" style="display:none;">
+            <h3>请求结果</h3>
+            <pre id="resultContent"></pre>
+        </div>
+
+        <div class="source-code">
+            <h3>后端源代码</h3>
+            <code>
+            <?php
+                highlight_file('ssrf.php');
+            ?>
+            </code>
+        </div>
     </div>
-</div>
 
-<footer class="text-center py-3">
-    <small class="text-muted">© 2024 Hello-CTF. All rights reserved.</small>
-</footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('ssrfForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const url = document.getElementById('urlInput').value;
+            fetch('ssrf.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `url=${encodeURIComponent(url)}`
+            })
+            .then(response => response.text())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                const resultContent = document.getElementById('resultContent');
+                resultContent.textContent = data;
+                resultDiv.style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+<footer class="footer">
+        <p>© 2025 <a href="https://hello-ctf.com" target="_blank">Hello-CTF</a>. All rights reserved.</p>
+    </footer>
 </body>
 </html>

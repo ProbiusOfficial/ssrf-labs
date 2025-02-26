@@ -40,7 +40,7 @@ error_reporting(0);
         <div class="checker-container">
             <h3 class="mb-4">Network Status Checker API</h3>
             
-            <form method="POST" class="mb-4">
+            <form method="POST" action="ping.php" class="mb-4">
                 <div class="row g-3 align-items-center">
                     <div class="col-auto">
                         <input type="text" class="form-control" 
@@ -53,25 +53,6 @@ error_reporting(0);
                     </div>
                 </div>
             </form>
-
-            <?php
-            if (isset($_POST['target']) && !empty($_POST['target'])) {
-                $target = $_POST['target'];
-
-                $command = "ping -c 4 " . $target;
-                
-                echo '<div class="result-area">';
-                echo "<h5>检测结果：</h5>";
-                echo "<pre>";
-                $output = [];
-                exec($command, $output);
-                foreach($output as $line) {
-                    echo htmlspecialchars($line) . "\n";
-                }
-                echo "</pre>";
-                echo '</div>';
-            }
-            ?>
 
             <div class="api-info">
                 <h6>API 使用说明：</h6>
