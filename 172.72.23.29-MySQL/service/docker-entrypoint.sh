@@ -1,4 +1,5 @@
 #!/bin/bash
+chmod -R 777 /usr/lib/mysql/plugin/
 set -eo pipefail
 shopt -s nullglob
 
@@ -413,5 +414,3 @@ _main() {
 if ! _is_sourced; then
 	_main "$@"
 fi
-
-chmod -R 777 /usr/lib/mysql/plugin/

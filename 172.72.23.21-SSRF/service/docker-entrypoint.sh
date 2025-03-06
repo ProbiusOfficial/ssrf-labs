@@ -28,8 +28,4 @@ echo $INSERT_FLAG | tee /flag
 
 chmod 744 /flag
 
-php-fpm & nginx &
-
-echo "Running..."
-
-tail -F /var/log/nginx/access.log /var/log/nginx/error.log
+apache2-foreground
