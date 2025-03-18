@@ -76,4 +76,10 @@ services:
       ssrf_labs:
         ipv4_address: 172.72.23.29
 
+  web10_fpm:
+    image: php:fpm
+    networks:
+      ssrf_labs:
+        ipv4_address: 172.72.23.30
+
 
